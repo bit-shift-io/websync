@@ -1,7 +1,0 @@
-/node_modules/
-/app/bower_components/
-/.idea/
-*.sublime*
-wsdata.json
-/dist/
-npm-debug.log
