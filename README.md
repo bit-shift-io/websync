@@ -1,90 +1,47 @@
-# **websync is no longer maintained**
-Feel free to use websync if it works for you, otherwise you need to make a fork and fix any and all issues without my help.
-
-# **websync**
-
-_websync is intended to be an **rsync task manager**, where rsync tasks can be added, scheduled and maintained in a sane manner._
-
-## Table of content
-
-- [Installation](#installation)
-- [Screenshots](#screenshots)
-- [Features](#features)
-- [websync@docker](#websyncdocker)
-- [Bugs & Requests/Enhancments](#bugs--requestsenhancments)
-- [Roadmap](#roadmap)
-- [Collaborate](#collaborate)
-- [Contact](#contact)
-- [FAQ](https://github.com/furier/websync/wiki/FAQ)
-- [License](#license---mit)
-
-## Installation
-
-- [OS X](https://github.com/furier/websync/wiki/Installation---OS-X)
-- [Ubuntu 12.04](https://github.com/furier/websync/wiki/Installation---Ubuntu-12.04)
-- [Debian 6](https://github.com/furier/websync/wiki/Installation-Debian-6)
-- Should work for any unix like system.
-
-## Screenshots
-
-### Tasks tab
-![Tasks](doc/screenshots/tasks_tab.png)
-
-### Hosts tab
-![Hosts](doc/screenshots/hosts_tab.png)
-
-## Features
-
-- All
-  - Every change is auto synchronized with the back end, no manual saving is required!
-  - Data is stored in a simple json file on disk!
-
-- Tasks
-  - Create
-  - Edit
-  - Remove
-  - Clone
-  - Schedule
-  - Multiple paths defined for one task.
-  - Either source or destination can be a remote target, as long as a passwordless ssh RSA key (for the host running websync) has been added to authorized hosts on the remote target.
-  - Realtime logs for each task in the browser.
-  - Test and Run on demand.
-
-- Hosts
-  - Create
-  - Edit
-  - Remove
-  - ssh-copy-id to remote targets
+# websync docker
+Websync updated to run on alpine linux with newer ssh and container format.  
+Original from ```https://github.com/furier/websync```  
 
 ## websync@docker
 
-websync can now be found @ docker, get it [here](https://registry.hub.docker.com/u/furier/websync/)!
+websync can now be found @ docker, get it [here](https://registry.hub.docker.com/r/gibbz/websync)!
 
 All you have to do is
-
-    sudo docker pull furier/websync
-    sudo docker run -d -p 3000:3000 -v /path/to/share:/path/to/share -w /src furier/websync node server.js
-    
+```
+sudo docker pull gibbz/websync
+sudo docker run -d -p 3000:3000 -v /path/share:/path/share furier/websync
+```
 and you are done!
 
-## Bugs & Requests/Enhancments
+## docker compose
+Create a websync folder with empty wsdata.json file if you want to store a copy of your data.
+```
+services:
+  websync:
+    image: gibbz/websync
+    container_name: websync
+    restart: unless-stopped
+    volumes:
+      - /backup_dir:/backup
+      - /source_dir:/source
+      - ./websync/wsdata.json:/src/wsdata.json
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3000:3000
+```
 
-Please file an issue report if you find a bug, or have any other request, suggestion etc!
+## dockerfile build notes
 
-## Roadmap
+### To build from Dockerfile
+```docker build -t gibbz/websync .```
 
-- **File Browser**, which can browse both localhost and remote targets.
-- **Path autocompletion** for both localhost and remote targets when just typing the paths manually in the path list for each task.
-- **Progressbars** to view total task progress, individual task progress and for each file!
+### Open an image for browsing
+```docker run -i -t gibbz/websync /bin/sh```
 
-## Collaborate
 
-- Collaborators are very welcome, contact me!
-- Pull requests are also welcome, fork me and send me a pull request!
+### Connect to a container
+First run the container
+```docker container run --name debug -d -w /src gibbz/websync node server.js```
 
-## Contact
-
-- Authors
-  - Sander Struijk - furier84+github@gmail.com
-
-## LICENSE - MIT
+Then connect
+```docker container exec -it debug /bin/sh```
