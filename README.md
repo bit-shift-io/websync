@@ -40,8 +40,8 @@ services:
 
 
 ### Connect to a container
-First run the container
+First run the container.  
 ```docker container run --name debug -d -w /src gibbz/websync node server.js```
 
-Then connect
+Then connect.  
 ```docker container exec -it debug /bin/sh```
