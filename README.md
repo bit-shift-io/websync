@@ -38,10 +38,16 @@ services:
 ### Open an image for browsing
 ```docker run -i -t gibbz/websync /bin/sh```
 
-
 ### Connect to a container
 First run the container.  
 ```docker container run --name debug -d -w /src gibbz/websync node server.js```
 
 Then connect.  
 ```docker container exec -it debug /bin/sh```
+
+### Tag for dockerhub
+This will be tagged when the above build is done also.
+```docker tag websync:latest gibbz/websync:latest```
+
+### Push to dockerhub
+```docker push gibbz/websync:latest```
